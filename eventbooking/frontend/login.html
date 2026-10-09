@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | EventBooking</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at 15% 20%,
+                    rgba(255, 180, 120, 0.35), transparent 28%),
+                radial-gradient(circle at 85% 80%,
+                    rgba(157, 125, 255, 0.3), transparent 30%),
+                linear-gradient(135deg, #17172f, #292044, #512e50);
+            color: #222;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+            color: white;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #ffab76;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 22px;
+            font-size: 14px;
+        }
+
+        .navbar a:hover {
+            color: #ffab76;
+        }
+
+        .page {
+            min-height: 82vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 35px 18px 60px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 40px 35px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 24px;
+            background: rgba(255,255,255,0.96);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+        }
+
+        .icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 23px;
+            border-radius: 18px;
+            background: #fff0e8;
+            color: #df673b;
+            font-size: 28px;
+        }
+
+        .tag {
+            margin-bottom: 10px;
+            color: #df673b;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            margin-bottom: 12px;
+            color: #211d35;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            margin-bottom: 27px;
+            color: #777487;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            color: #302b42;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e1deea;
+            border-radius: 10px;
+            outline: none;
+            background: #faf9fc;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #e9784c;
+            box-shadow: 0 0 0 3px rgba(233,120,76,0.13);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(100deg, #ef8757, #d95345);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(217,83,69,0.22);
+            transition: 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(217,83,69,0.3);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .register-text {
+            margin-top: 24px;
+            color: #777487;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .register-text a {
+            color: #d95345;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .home-link {
+            display: block;
+            margin-top: 20px;
+            color: #777487;
+            text-align: center;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 20px;
+            }
+
+            .navbar a {
+                margin-left: 10px;
+            }
+
+            .login-card {
+                padding: 30px 23px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">Event<span>Booking.</span></div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="register.html">Register</a>
+    </nav>
+</header>
+
+<main class="page">
+    <section class="login-card">
+        <div class="icon">✦</div>
+        <p class="tag">WELCOME BACK</p>
+        <h1>Login to your account</h1>
+        <p class="subtitle">
+            Your next experience is waiting.
+            Sign in to book events and manage your tickets.
+        </p>
+
+        <form id="loginForm">
+            <label for="email">Email Address</label>
+            <input type="email" id="email"
+                   placeholder="you@example.com" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password"
+                   placeholder="Enter your password" required>
+
+            <button type="submit" id="loginButton">Login →</button>
+            <p id="message" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="register-text">
+            New to EventBooking?
+            <a href="register.html">Create account</a>
+        </p>
+
+        <a class="home-link" href="index.html">← Back to Home</a>
+    </section>
+</main>
+
+<script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const button = document.getElementById("loginButton");
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        button.disabled = true;
+        button.textContent = "Logging in...";
+        message.style.color = "#666";
+        message.textContent = "Checking your account...";
+
+        try {
+            const params = new URLSearchParams({
+                email: email,
+                password: password
+            });
+
+            const response = await fetch(
+                "http://localhost:8081/api/users/login?" +
+                params.toString(),
+                { method: "POST" }
+            );
+
+            if (response.status === 401) {
+                throw new Error(
+                    "Email or password is incorrect. Register first if you don't have an account."
+                );
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    "Server error (" + response.status +
+                    "). Please check the backend."
+                );
+            }
+
+            const user = await response.json();
+
+            if (user.id == null) {
+                throw new Error("User ID was not returned by the server.");
+            }
+
+            // Save logged-in user details
+            sessionStorage.setItem("loggedInUserId", String(user.id));
+            localStorage.setItem("loggedInUserId", String(user.id));
+
+            sessionStorage.setItem(
+                "loggedInUserName",
+                user.name || ""
+            );
+
+            localStorage.setItem(
+                "loggedInUserName",
+                user.name || ""
+            );
+
+            console.log("Login successful. User ID:", user.id);
+
+            message.style.color = "#18834b";
+            message.textContent = "Login successful! Opening home page...";
+
+            window.location.href = "index.html";
+
+        } catch (error) {
+            message.style.color = "#c62828";
+            message.textContent =
+                error.message.includes("Failed to fetch")
+                    ? "Cannot connect to backend. Make sure Spring Boot is running on port 8081."
+                    : error.message;
+
+        } finally {
+            button.disabled = false;
+            button.textContent = "Login →";
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -385,3 +385,94 @@ footer {
         padding: 0 15px;
     }
 }
+
+
+/* =========================
+   BOOKING CONTROLS
+   ========================= */
+
+.booking-controls {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #eeeeee;
+}
+
+.booking-controls label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.ticket-quantity {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d7dce2;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #ffffff;
+    color: #18202a;
+}
+
+.ticket-quantity:focus {
+    outline: 2px solid #e66a3c;
+    border-color: #e66a3c;
+}
+
+.total-price {
+    margin-top: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #18202a;
+}
+
+.total-amount {
+    color: #e66a3c;
+}
+
+.book-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 13px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #e66a3c;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.book-btn:hover:not(:disabled) {
+    background: #c95127;
+    transform: translateY(-2px);
+}
+
+.book-btn:disabled {
+    background: #a6abb1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.booking-message {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.success-message {
+    color: #18834b;
+    font-weight: 700;
+}
+
+@media (max-width: 600px) {
+    .booking-controls {
+        margin-top: 16px;
+    }
+
+    .event-content {
+        padding: 17px;
+    }
+}

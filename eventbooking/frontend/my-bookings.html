@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | EventBooking</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff0eb, #f7f4ff);
+            color: #211d36;
+        }
+
+        header {
+            background: #211b35;
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #ff936b;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 45px auto;
+            padding: 0 20px;
+            min-height: 65vh;
+        }
+
+        .subtitle {
+            color: #ed6845;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #77718b;
+            margin-bottom: 25px;
+        }
+
+        #status {
+            margin: 20px 0;
+            color: #625d73;
+        }
+
+        #bookingList {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 20px;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            border: 1px solid #eee5ef;
+            box-shadow: 0 8px 25px #241c3510;
+        }
+
+        .booking-card h2 {
+            font-size: 20px;
+            margin-bottom: 18px;
+        }
+
+        .booking-card p {
+            margin: 12px 0;
+            color: #625d73;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .total {
+            color: #e96843 !important;
+            font-weight: bold;
+            font-size: 18px !important;
+        }
+
+        button, .explore-btn {
+            display: inline-block;
+            border: none;
+            border-radius: 7px;
+            padding: 12px 18px;
+            margin-top: 12px;
+            background: #e96d49;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #c83c4a;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .empty {
+            background: white;
+            text-align: center;
+            padding: 38px 20px;
+            border: 1px dashed #d9cddd;
+            border-radius: 14px;
+            grid-column: 1 / -1;
+        }
+
+        .empty h2 {
+            margin-bottom: 12px;
+        }
+
+        .empty p {
+            margin-bottom: 8px;
+            color: #625d73;
+        }
+
+        footer {
+            text-align: center;
+            color: #77718b;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 550px) {
+            header {
+                padding: 18px;
+            }
+
+            nav a {
+                margin-left: 8px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Event<span>Booking.</span></div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="my-bookings.html">My Bookings</a>
+        <a href="login.html" id="loginLink">Login</a>
+        <a href="#" id="logoutLink" style="display:none;">Logout</a>
+    </nav>
+</header>
+
+<main class="container">
+    <p class="subtitle">YOUR TICKETS</p>
+    <h1>My Bookings 🎟️</h1>
+    <p class="description">
+        View your booked events and manage your reservations.
+    </p>
+
+    <p id="status">Loading bookings...</p>
+    <section id="bookingList"></section>
+</main>
+
+<footer>© 2026 EventBookingSystem</footer>
+
+<script>
+    const API = "http://localhost:8081";
+
+    const bookingList = document.getElementById("bookingList");
+    const statusText = document.getElementById("status");
+    const loginLink = document.getElementById("loginLink");
+    const logoutLink = document.getElementById("logoutLink");
+
+    function getUserId() {
+        return Number(
+            sessionStorage.getItem("loggedInUserId") ||
+            localStorage.getItem("loggedInUserId") ||
+            0
+        );
+    }
+
+    if (getUserId() > 0) {
+        loginLink.style.display = "none";
+        logoutLink.style.display = "inline";
+    }
+
+    logoutLink.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        sessionStorage.removeItem("loggedInUserId");
+        sessionStorage.removeItem("loggedInUserName");
+        localStorage.removeItem("loggedInUserId");
+        localStorage.removeItem("loggedInUserName");
+
+        window.location.href = "login.html";
+    });
+
+    function showMessage(title, message, showExplore = false) {
+        bookingList.innerHTML = "";
+
+        const box = document.createElement("div");
+        box.className = "empty";
+
+        const heading = document.createElement("h2");
+        heading.textContent = title;
+
+        const paragraph = document.createElement("p");
+        paragraph.textContent = message;
+
+        box.appendChild(heading);
+        box.appendChild(paragraph);
+
+        if (showExplore) {
+            const link = document.createElement("a");
+            link.href = "index.html";
+            link.className = "explore-btn";
+            link.textContent = "Explore Events";
+            box.appendChild(link);
+        }
+
+        bookingList.appendChild(box);
+    }
+
+    async function loadBookings() {
+        bookingList.innerHTML = "";
+        statusText.textContent = "Loading bookings...";
+
+        const userId = getUserId();
+
+        if (!Number.isInteger(userId) || userId <= 0) {
+            statusText.textContent = "";
+            showMessage(
+                "Login Required",
+                "Please login with your account to view bookings."
+            );
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `${API}/api/bookings/user/${userId}`
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Booking API error: " + response.status
+                );
+            }
+
+            const bookings = await response.json();
+
+            if (!Array.isArray(bookings)) {
+                throw new Error("Unexpected booking data from server.");
+            }
+
+            const eventResponse = await fetch(`${API}/api/events`);
+
+            if (!eventResponse.ok) {
+                throw new Error("Unable to load event details.");
+            }
+
+            const events = await eventResponse.json();
+
+            const eventMap = new Map(
+                events.map(event => [Number(event.id), event])
+            );
+
+            statusText.textContent = "";
+
+            if (bookings.length === 0) {
+                showMessage(
+                    "No Bookings Found",
+                    "You have no bookings yet.",
+                    true
+                );
+                return;
+            }
+
+            bookings.forEach(booking => {
+                const event = eventMap.get(Number(booking.eventId));
+                const card = document.createElement("article");
+                card.className = "booking-card";
+
+                const heading = document.createElement("h2");
+                heading.textContent = event
+                    ? event.name
+                    : "Event #" + booking.eventId;
+
+                card.appendChild(heading);
+
+                const details = [
+                    ["Booking ID", booking.id],
+                    ["Event Date", event?.date || "Not available"],
+                    ["Location", event?.location || "Not available"],
+                    ["Tickets", booking.numberOfTickets]
+                ];
+
+                details.forEach(([label, value]) => {
+                    const p = document.createElement("p");
+                    p.textContent = label + ": " + (value ?? "Not available");
+                    card.appendChild(p);
+                });
+
+                const total = document.createElement("p");
+                total.className = "total";
+                total.textContent =
+                    "Total: ₹" + Number(booking.totalPrice || 0).toFixed(2);
+                card.appendChild(total);
+
+                const cancelButton = document.createElement("button");
+                cancelButton.className = "cancel-btn";
+                cancelButton.textContent = "Cancel Booking";
+
+                cancelButton.addEventListener("click", async function() {
+                    cancelButton.disabled = true;
+                    cancelButton.textContent = "Cancelling...";
+                    statusText.textContent = "";
+
+                    try {
+                        const cancelResponse = await fetch(
+                            `${API}/api/bookings/${booking.id}`,
+                            { method: "DELETE" }
+                        );
+
+                        if (!cancelResponse.ok) {
+                            throw new Error(
+                                "Cancellation failed: " + cancelResponse.status
+                            );
+                        }
+
+                        await loadBookings();
+
+                    } catch (error) {
+                        console.error("Cancellation error:", error);
+                        statusText.textContent =
+                            error.message || "Unable to cancel booking.";
+
+                        cancelButton.disabled = false;
+                        cancelButton.textContent = "Cancel Booking";
+                    }
+                });
+
+                card.appendChild(cancelButton);
+                bookingList.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error("Loading bookings failed:", error);
+            statusText.textContent =
+                "Unable to load bookings: " + error.message;
+
+            showMessage(
+                "Unable to Load Bookings",
+                "Check that Spring Boot is running on port 8081 and try refreshing the page."
+            );
+
+            const retry = document.createElement("button");
+            retry.textContent = "Try Again";
+            retry.addEventListener("click", loadBookings);
+            bookingList.firstElementChild?.appendChild(retry);
+        }
+    }
+
+    loadBookings();
+</script>
+
+</body>
+</html>
